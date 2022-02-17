@@ -1,0 +1,46 @@
+import math
+import iisignature
+import matplotlib
+import numpy
+
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+import numpy as np
+from math import sqrt
+
+n=10
+T= 1.
+times = np.linspace(0., T, n)
+dt = times[1]-times[0]
+dB = np.sqrt(dt)*np.random.normal(size=(n-1,))
+dB1 = np.sqrt(dt)*np.random.normal(size=(n-1,))
+B0 = np.zeros(shape=(1,))
+B=np.concatenate((B0, np.cumsum(dB,))).reshape((-1,1))
+B1=np.concatenate((B0, np.cumsum(dB1))).reshape((-1,1))
+
+BPath = np.append(B,B1, axis=1)
+
+sig1 =iisignature.sig(BPath, int(4-1))
+sig2 =iisignature.sig(BPath, int(4))
+siglevel = np.array([j for j in sig2 if j not in sig1])
+
+norm = np.array([siglevel[0],siglevel[3],siglevel[12], siglevel[15]])
+normsum = np.sum(norm)
+normlength = abs(normsum)
+
+l = math.factorial(4)*(normlength)
+result = math.pow(l,float(1)/float(4))
+
+
+
+dBsq = dB**(2)
+dB1sq = dB1**(2)
+sq = dBsq + dB1sq
+elements = np.sqrt(sq)
+length = np.sum(elements)
+
+print length
+print result
+
+
+
